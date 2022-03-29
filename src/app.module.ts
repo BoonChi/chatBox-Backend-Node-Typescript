@@ -9,6 +9,7 @@ import { ConfigModule } from '@nestjs/config';
 @Module({
   controllers: [AppController],
   providers: [AppService, AppGateway],
-  imports: [ConfigModule.forRoot({}), ConversationModule, DatabaseModule],
+  // imports: [ConfigModule.forRoot({}), ConversationModule, DatabaseModule],
+  imports: [ConfigModule.forRoot({})],
 })
 export class AppModule { }
