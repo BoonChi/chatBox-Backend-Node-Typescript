@@ -1,5 +1,6 @@
 import { TypeOrmModuleOptions } from '@nestjs/typeorm';
-import { Conversation } from 'src/conversations/conversation.entity';
+import { ConversationEntity } from '@conversations/entity/conversations.entity';
+import { UsersEntity } from '@users/entity/users.entity';
 
 const typeOrmConfig: TypeOrmModuleOptions = {
   type: 'postgres',
@@ -8,13 +9,11 @@ const typeOrmConfig: TypeOrmModuleOptions = {
   username: process.env.POSTGRES_USER,
   password: process.env.POSTGRES_PASSWORD,
   database: 'chatbox_db',
-  entities: [Conversation],
+  entities: [ConversationEntity, UsersEntity],
   migrationsRun: false,
   logging: true,
   migrationsTableName: 'migration',
-  migrations: [
-    'src/migration/**/*.ts'
-  ],
+  migrations: ['src/migration/**/*.ts'],
   synchronize: false,
   cli: {
     migrationsDir: 'src/migration',

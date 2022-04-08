@@ -1,20 +1,30 @@
-import { Body, Controller, Delete, Get, Inject, Param, Post, Put } from '@nestjs/common';
+import { Body, Controller, Get, Post, Req, UseGuards } from '@nestjs/common';
+import { AuthGuard } from '@nestjs/passport';
+import { UsersDto } from '@users/dto/users.dto';
 import { ConversationsService } from './conversations.service';
-import { createConversationDto } from './dto/create.dto';
-import { getConversationDto, mapper } from './dto/get.dto';
+import {
+  ConversationsCreateDto,
+  ConversationsDto,
+} from './dto/conversations.dto';
 
 @Controller('api/conversations')
 export class ConversationsController {
-  constructor(readonly conversationsService: ConversationsService) { }
+  constructor(readonly conversationsService: ConversationsService) {}
 
   @Get()
-  async findAll(): Promise<mapper[]> {
-    return await this.conversationsService.get();
+  @UseGuards(AuthGuard())
+  async findByUser(@Req() req: any): Promise<ConversationsDto[]> {
+    const user = req.user as UsersDto;
+    return await this.conversationsService.get(user);
   }
 
   @Post()
-  async create(@Body() createDto: createConversationDto): Promise<getConversationDto> {
-    return await this.conversationsService.create(createDto);
+  @UseGuards(AuthGuard())
+  async create(
+    @Body() createDto: ConversationsCreateDto,
+    @Req() req: any,
+  ): Promise<ConversationsDto> {
+    const user = req.user as UsersDto;
+    return await this.conversationsService.create(user, createDto);
   }
 }
-
