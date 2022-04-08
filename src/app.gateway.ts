@@ -1,24 +1,36 @@
-import { Logger } from '@nestjs/common';
-import { MessageBody, OnGatewayConnection, OnGatewayDisconnect, SubscribeMessage, WebSocketGateway, WebSocketServer, WsResponse } from '@nestjs/websockets';
+import { Logger, Req, UseGuards } from '@nestjs/common';
+import { AuthGuard } from '@nestjs/passport';
+import {
+  OnGatewayConnection,
+  OnGatewayDisconnect,
+  SubscribeMessage,
+  WebSocketGateway,
+  WebSocketServer,
+} from '@nestjs/websockets';
+import { UsersDto } from '@users/dto/users.dto';
 import { Socket, Server } from 'socket.io';
 import { ConversationsService } from './conversations/conversations.service';
 
 @WebSocketGateway(parseInt(process.env.SOCKET_PORT, 10), {
   cors: {
-    origin: '*'
-  }
+    origin: '*',
+  },
 })
 export class AppGateway implements OnGatewayConnection, OnGatewayDisconnect {
+  constructor(private conversationService: ConversationsService) {}
   @WebSocketServer() server: Server;
   private logger = new Logger('AppGateway');
 
+  @UseGuards(AuthGuard())
   @SubscribeMessage('msgToServer')
-  handleMessage(client: Socket, payload: string): void {
-    this.logger.log(payload, 'catch from client')
+  handleMessage(payload: string, @Req() req: any): void {
+    const user = <UsersDto>req.user;
+    this.logger.log(payload, 'catch from client');
     this.server.emit('msgToClient', payload);
+    this.conversationService.create(user, { text: payload });
   }
 
-  afterInit(server: Server) {
+  afterInit() {
     this.logger.log('Init');
   }
 
@@ -26,7 +38,7 @@ export class AppGateway implements OnGatewayConnection, OnGatewayDisconnect {
     this.logger.log(`Client disconnected: ${client.id}`);
   }
 
-  handleConnection(client: Socket, ...args: any[]) {
+  handleConnection(client: Socket) {
     this.logger.log(`Client connected: ${client.id}`);
   }
 }

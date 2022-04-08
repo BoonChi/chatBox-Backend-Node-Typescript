@@ -1,28 +1,49 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Conversation } from './conversation.entity';
-import { createConversationDto } from './dto/create.dto';
+import { ConversationEntity } from './entity/conversations.entity';
+import { ConversationsDomain } from './domain/conversations.domain';
+import {
+  ConversationsCreateDto,
+  ConversationsDto,
+} from './dto/conversations.dto';
+import { UsersDto } from '@users/dto/users.dto';
+import { UsersService } from '@users/users.service';
 
 @Injectable()
 export class ConversationsService {
-  constructor(@InjectRepository(Conversation) private readonly conversationsRepo: Repository<Conversation>) { }
+  constructor(private usersService: UsersService) {}
+  @InjectRepository(ConversationEntity)
+  private readonly conversationsRepo: Repository<ConversationEntity>;
 
-  public async get() {
-    const result = await this.conversationsRepo.find()
-    const array = []
-    result.forEach((each) => {
-      const time = each.createdDate.toLocaleString()
-      array.push({
-        id: each.id, time, text: each.text, sent: each.sent
-      })
-    })
-    return array;
+  public async get({ username }: UsersDto) {
+    const owner = await this.usersService.getSingle(username);
+    const result = await this.conversationsRepo.find({
+      where: { owner },
+      relations: ['owner'],
+    });
+    if (!result) {
+      throw new HttpException(
+        `Conversation of ${username} doesn't exist`,
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+    return result.map((each) => ConversationsDomain.toDto(each));
   }
 
-  public async create(createDto: createConversationDto) {
-    const result = this.conversationsRepo.create(createDto)
-    await this.conversationsRepo.save(result);
-    return result;
+  async create(
+    { username }: UsersDto,
+    createDto: ConversationsCreateDto,
+  ): Promise<ConversationsDto> {
+    const { text } = createDto;
+
+    // get the user from db
+    const owner = await this.usersService.getSingle(username, true);
+    const conversations: ConversationEntity = this.conversationsRepo.create({
+      text,
+      owner,
+    });
+    await this.conversationsRepo.save(conversations);
+    return ConversationsDomain.toDto(conversations);
   }
 }

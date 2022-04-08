@@ -11,7 +11,9 @@
     "outDir": "./dist",
     "baseUrl": ".",
     "paths": {
-      "@entity/*": ["src/entity/*"]
+      "@entity/*": ["src/entity/*"],
+      "@users/*": ["src/users/*"],
+      "@conversations/*": ["src/conversations/*"]
     },
     "incremental": true,
     "skipLibCheck": true,
