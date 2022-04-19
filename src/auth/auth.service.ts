@@ -10,7 +10,7 @@ export class AuthService {
   constructor(
     private usersService: UsersService,
     private readonly jwtService: JwtService,
-  ) {}
+  ) { }
 
   async register(userDto: UsersCreateDto): Promise<RegistrationStatus> {
     let status: RegistrationStatus = {
@@ -52,7 +52,7 @@ export class AuthService {
   async validateUser(payload: JwtPayload): Promise<UsersDto> {
     const user = await this.usersService.getSingle(payload.username);
     if (!user) {
-      throw new HttpException('Invalid token', HttpStatus.UNAUTHORIZED);
+      throw new HttpException('Invalid token from validateUser', HttpStatus.UNAUTHORIZED);
     }
     return user;
   }

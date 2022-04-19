@@ -6,12 +6,16 @@ import {
   BeforeInsert,
 } from 'typeorm';
 import { hash } from 'bcrypt';
+import { Field, ID, ObjectType } from '@nestjs/graphql';
 
+@ObjectType()
 @Entity('users')
 export class UsersEntity {
+  @Field(() => ID)
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
+  @Field(() => String)
   @Column({
     type: 'varchar',
     length: 300,
@@ -23,6 +27,7 @@ export class UsersEntity {
   @Column({ type: 'varchar', nullable: false })
   password: string;
 
+  @Field(() => String)
   @Column({
     type: 'varchar',
     length: 300,

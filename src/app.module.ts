@@ -7,6 +7,7 @@ import { DatabaseModule } from './database/database.module';
 import { ConfigModule } from '@nestjs/config';
 import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
+import { GraphqlAppModule } from './graphql/graphql.module';
 
 @Module({
   controllers: [AppController],
@@ -17,6 +18,7 @@ import { UsersModule } from './users/users.module';
     DatabaseModule,
     AuthModule,
     UsersModule,
+    GraphqlAppModule,
   ],
 })
-export class AppModule {}
+export class AppModule { }

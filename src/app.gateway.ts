@@ -1,13 +1,13 @@
 import { Logger, Req, UseGuards } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import {
+  ConnectedSocket,
   OnGatewayConnection,
   OnGatewayDisconnect,
   SubscribeMessage,
   WebSocketGateway,
   WebSocketServer,
 } from '@nestjs/websockets';
-import { UsersDto } from '@users/dto/users.dto';
 import { Socket, Server } from 'socket.io';
 import { ConversationsService } from './conversations/conversations.service';
 
@@ -17,14 +17,18 @@ import { ConversationsService } from './conversations/conversations.service';
   },
 })
 export class AppGateway implements OnGatewayConnection, OnGatewayDisconnect {
-  constructor(private conversationService: ConversationsService) {}
+  constructor(private conversationService: ConversationsService) { }
   @WebSocketServer() server: Server;
   private logger = new Logger('AppGateway');
 
-  @UseGuards(AuthGuard())
   @SubscribeMessage('msgToServer')
-  handleMessage(payload: string, @Req() req: any): void {
-    const user = <UsersDto>req.user;
+  handleMessage(payload: string, @ConnectedSocket() client: Socket,): void {
+    const token = client.handshake.headers.authorization
+    console.log(token)
+    const user = {
+      username: "abu",
+      email: ""
+    }
     this.logger.log(payload, 'catch from client');
     this.server.emit('msgToClient', payload);
     this.conversationService.create(user, { text: payload });

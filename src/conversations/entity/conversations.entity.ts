@@ -1,3 +1,4 @@
+import { Field, ID, ObjectType } from '@nestjs/graphql';
 import { UsersEntity } from '@users/entity/users.entity';
 import {
   Entity,
@@ -8,16 +9,21 @@ import {
 } from 'typeorm';
 
 @Entity()
+@ObjectType()
 export class ConversationEntity {
   @PrimaryGeneratedColumn('uuid')
+  @Field(() => ID)
   id: string;
 
+  @Field(() => String)
   @Column({ type: 'varchar' })
   text: string;
 
+  @Field(() => Date)
   @CreateDateColumn({ type: 'timestamp' })
   createdDate: Date;
 
+  @Field(() => Date)
   @CreateDateColumn({ type: 'timestamp' })
   updatedDate: Date;
 

@@ -1,3 +1,4 @@
+import { Field, InputType } from '@nestjs/graphql';
 import { IsNotEmpty } from 'class-validator';
 
 export class ConversationsDto {
@@ -13,8 +14,9 @@ export class ConversationsDto {
   @IsNotEmpty()
   time: string;
 }
-
+@InputType()
 export class ConversationsCreateDto {
   @IsNotEmpty()
+  @Field(() => String)
   text: string;
 }

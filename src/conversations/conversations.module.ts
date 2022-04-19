@@ -6,6 +6,7 @@ import { ConversationsService } from './conversations.service';
 import { UsersModule } from '@users/users.module';
 import { AuthModule } from 'src/auth/auth.module';
 import { UsersEntity } from '@users/entity/users.entity';
+import { ConversationResolver } from './resolver/conversations.resolver';
 
 @Module({
   imports: [
@@ -14,7 +15,7 @@ import { UsersEntity } from '@users/entity/users.entity';
     AuthModule,
   ],
   controllers: [ConversationsController],
-  providers: [ConversationsService],
+  providers: [ConversationsService, ConversationResolver],
   exports: [ConversationsService],
 })
-export class ConversationModule {}
+export class ConversationModule { }

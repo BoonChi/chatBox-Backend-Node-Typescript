@@ -31,7 +31,7 @@ services:
       - DB_NAME=$POSTGRES_DB
       - POSTGRES_PORT=$POSTGRES_DOCKER_PORT
       - SECRET_KEY=xobsecret123
-      - EXPIRES_IN=2h
+      - EXPIRES_IN=2d
     stdin_open: true
     tty: true
     volumes:
