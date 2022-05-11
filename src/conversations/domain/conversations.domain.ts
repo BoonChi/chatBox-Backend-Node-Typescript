@@ -19,7 +19,7 @@ export class ConversationsDomain implements Readonly<ConversationsDomain> {
       id: entity.id,
       text: entity.text,
       time: entity.createdDate.toLocaleString(),
-      user: entity.owner.username,
+      user: entity.owner.email,
     };
   }
 }

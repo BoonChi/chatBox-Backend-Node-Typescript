@@ -27,15 +27,6 @@ export class UsersEntity {
   @Column({ type: 'varchar', nullable: false })
   password: string;
 
-  @Field(() => String)
-  @Column({
-    type: 'varchar',
-    length: 300,
-    unique: true,
-    nullable: false,
-  })
-  username: string;
-
   @CreateDateColumn({ type: 'timestamp' })
   createdDate: Date;
 

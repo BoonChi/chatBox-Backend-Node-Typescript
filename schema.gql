@@ -5,7 +5,6 @@
 type UsersEntity {
   id: ID!
   email: String!
-  username: String!
 }
 
 type ConversationEntity {

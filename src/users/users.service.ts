@@ -11,21 +11,21 @@ export class UsersService {
   constructor(
     @InjectRepository(UsersEntity)
     private readonly usersRepo: Repository<UsersEntity>,
-  ) {}
+  ) { }
 
-  private async findUser(username: UsersDto['username'], newUser = false) {
-    const user = await this.usersRepo.findOne({ username });
+  private async findUser(email: UsersDto['email'], newUser = false) {
+    const user = await this.usersRepo.findOne({ email });
     if (!user && !newUser) {
       throw new HttpException(
-        `Username ${username} doesn't exist`,
+        `Email ${email} doesn't exist`,
         HttpStatus.BAD_REQUEST,
       );
     }
     return user;
   }
 
-  public async getSingle(username: string, entity = false) {
-    const result = await this.findUser(username);
+  public async getSingle(email: string, entity = false) {
+    const result = await this.findUser(email);
     if (!entity) {
       return UsersDomain.toDto(result);
     }
@@ -33,10 +33,10 @@ export class UsersService {
   }
 
   public async create(createDto: UsersCreateDto) {
-    const user = await this.findUser(createDto.username, true);
+    const user = await this.findUser(createDto.email, true);
     if (user) {
       throw new HttpException(
-        `Username ${createDto.username} already exists`,
+        `Email ${createDto.email} already exists`,
         HttpStatus.BAD_REQUEST,
       );
     }
@@ -44,7 +44,7 @@ export class UsersService {
     const userCreated = await this.usersRepo.save(result);
     if (!userCreated.id) {
       throw new HttpException(
-        `Username ${createDto.username} failed to register`,
+        `Email ${createDto.email} failed to register`,
         HttpStatus.BAD_REQUEST,
       );
     }
@@ -52,16 +52,16 @@ export class UsersService {
   }
 
   async findByLogin({
-    username,
+    email,
     password,
-  }: LoginUserDto): Promise<UsersDto['username']> {
-    const user = await this.findUser(username);
+  }: LoginUserDto): Promise<UsersDto['email']> {
+    const user = await this.findUser(email);
     const areEqual = await comparePasswords(user.password, password);
 
     if (!areEqual) {
       throw new HttpException('Invalid credentials', HttpStatus.UNAUTHORIZED);
     }
 
-    return user.username;
+    return user.email;
   }
 }

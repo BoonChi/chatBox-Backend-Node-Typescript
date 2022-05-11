@@ -11,10 +11,11 @@ export type SocketMiddleware = (socket: Socket, next: (err?: Error) => void) => 
 export const WSAuthMiddleware = (jwtService: JwtService, userService: UsersService): SocketMiddleware => {
   return async (socket: AuthSocket, next) => {
     try {
-      const jwtPayload = jwtService.verify(
-        socket.handshake.auth.jwt ?? '',
+      const jwtPayload = jwtService.decode(
+        socket.handshake.headers.authorization,
       ) as JwtPayload;
-      const userResult = await userService.getSingle(jwtPayload.username);
+      const userResult = await userService.getSingle(jwtPayload.email);
+      console.log(socket.handshake.headers.authorization, jwtPayload, userResult, 'middleware')
       if (userResult.email) {
         socket.authorizedUser = userResult;
         next();

@@ -1,3 +1,10 @@
 export interface JwtPayload {
-  username: string;
+  email: string;
 }
+
+export interface JwtDecodePayload extends JwtPayload {
+  iat: number;
+  exp: number;
+}
+
+
