@@ -11,13 +11,9 @@ export class UsersDomain implements Readonly<UsersDomain> {
   @IsString()
   password: string;
 
-  @IsString()
-  username: Date;
-
   public static toDto(entity: UsersEntity) {
     return {
       email: entity.email,
-      username: entity.username,
     };
   }
 }

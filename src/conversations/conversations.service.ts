@@ -16,15 +16,15 @@ export class ConversationsService {
   @InjectRepository(ConversationEntity)
   private readonly conversationsRepo: Repository<ConversationEntity>;
 
-  public async get({ username }: UsersDto) {
-    const owner = await this.usersService.getSingle(username);
+  public async get({ email }: UsersDto) {
+    const owner = await this.usersService.getSingle(email);
     const result = await this.conversationsRepo.find({
       where: { owner },
       relations: ['owner'],
     });
     if (!result) {
       throw new HttpException(
-        `Conversation of ${username} doesn't exist`,
+        `Conversation of ${email} doesn't exist`,
         HttpStatus.BAD_REQUEST,
       );
     }
@@ -32,13 +32,13 @@ export class ConversationsService {
   }
 
   async create(
-    { username }: UsersDto,
+    { email }: UsersDto,
     createDto: ConversationsCreateDto,
   ): Promise<ConversationsDto> {
     const { text } = createDto;
 
     // get the user from db
-    const owner = await this.usersService.getSingle(username, true);
+    const owner = await this.usersService.getSingle(email, true);
     const conversations: ConversationEntity = this.conversationsRepo.create({
       text,
       owner,

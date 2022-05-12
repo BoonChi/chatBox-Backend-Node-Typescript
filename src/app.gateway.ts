@@ -1,13 +1,12 @@
-import { Logger, Req, UseGuards } from '@nestjs/common';
-import { AuthGuard } from '@nestjs/passport';
+import { Logger } from '@nestjs/common';
+import { JwtService } from '@nestjs/jwt';
 import {
-  ConnectedSocket,
-  OnGatewayConnection,
-  OnGatewayDisconnect,
   SubscribeMessage,
   WebSocketGateway,
   WebSocketServer,
 } from '@nestjs/websockets';
+import { JwtDecodePayload } from '@users/type/i-jwt';
+import { UsersService } from '@users/users.service';
 import { Socket, Server } from 'socket.io';
 import { ConversationsService } from './conversations/conversations.service';
 
@@ -16,33 +15,22 @@ import { ConversationsService } from './conversations/conversations.service';
     origin: '*',
   },
 })
-export class AppGateway implements OnGatewayConnection, OnGatewayDisconnect {
-  constructor(private conversationService: ConversationsService) { }
+// @UseGuards(AuthGuard())
+export class AppGateway {
+  constructor(private readonly jwtService: JwtService,
+    private conversationService: ConversationsService) { }
   @WebSocketServer() server: Server;
   private logger = new Logger('AppGateway');
 
   @SubscribeMessage('msgToServer')
-  handleMessage(payload: string, @ConnectedSocket() client: Socket,): void {
-    const token = client.handshake.headers.authorization
-    console.log(token)
-    const user = {
-      username: "abu",
-      email: ""
-    }
-    this.logger.log(payload, 'catch from client');
+  async handleMessage(client: Socket, payload: string): Promise<void> {
+    const jwtPayload = this.jwtService.decode(client.handshake.headers.authorization.replace('Bearer ', '')) as JwtDecodePayload
+
+    this.logger.log(payload, 'catch from client', jwtPayload);
     this.server.emit('msgToClient', payload);
-    this.conversationService.create(user, { text: payload });
-  }
-
-  afterInit() {
-    this.logger.log('Init');
-  }
-
-  handleDisconnect(client: Socket) {
-    this.logger.log(`Client disconnected: ${client.id}`);
-  }
-
-  handleConnection(client: Socket) {
-    this.logger.log(`Client connected: ${client.id}`);
+    await this.conversationService.create({
+      email: jwtPayload
+        .email
+    }, { text: payload });
   }
 }
