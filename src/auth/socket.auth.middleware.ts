@@ -7,15 +7,20 @@ import { IReq } from 'src/common/type/common.type';
 export interface AuthSocket extends Socket {
   authorizedUser: IReq['user'];
 }
-export type SocketMiddleware = (socket: Socket, next: (err?: Error) => void) => void
-export const WSAuthMiddleware = (jwtService: JwtService, userService: UsersService): SocketMiddleware => {
+export type SocketMiddleware = (
+  socket: Socket,
+  next: (err?: Error) => void,
+) => void;
+export const WSAuthMiddleware = (
+  jwtService: JwtService,
+  userService: UsersService,
+): SocketMiddleware => {
   return async (socket: AuthSocket, next) => {
     try {
       const jwtPayload = jwtService.decode(
         socket.handshake.headers.authorization,
       ) as JwtPayload;
       const userResult = await userService.getSingle(jwtPayload.email);
-      console.log(socket.handshake.headers.authorization, jwtPayload, userResult, 'middleware')
       if (userResult.email) {
         socket.authorizedUser = userResult;
         next();
@@ -31,5 +36,5 @@ export const WSAuthMiddleware = (jwtService: JwtService, userService: UsersServi
         message: 'Unauthorized',
       });
     }
-  }
-}
+  };
+};

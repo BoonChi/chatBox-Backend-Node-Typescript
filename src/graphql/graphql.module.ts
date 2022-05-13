@@ -9,8 +9,8 @@ import { GraphQLModule } from '@nestjs/graphql';
       debug: true,
       playground: true,
       autoSchemaFile: './schema.gql',
-      context: ({ req }) => ({ req })
+      context: ({ req }) => ({ req }),
     }),
   ],
 })
-export class GraphqlAppModule { }
+export class GraphqlAppModule {}
