@@ -12,7 +12,7 @@ import { UsersService } from '@users/users.service';
 
 @Injectable()
 export class ConversationsService {
-  constructor(private usersService: UsersService) { }
+  constructor(private usersService: UsersService) {}
   @InjectRepository(ConversationEntity)
   private readonly conversationsRepo: Repository<ConversationEntity>;
 

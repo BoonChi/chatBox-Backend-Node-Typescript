@@ -18,4 +18,4 @@ import { ConversationResolver } from './resolver/conversations.resolver';
   providers: [ConversationsService, ConversationResolver],
   exports: [ConversationsService],
 })
-export class ConversationModule { }
+export class ConversationModule {}

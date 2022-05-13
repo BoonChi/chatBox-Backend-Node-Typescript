@@ -11,7 +11,7 @@ export class UsersService {
   constructor(
     @InjectRepository(UsersEntity)
     private readonly usersRepo: Repository<UsersEntity>,
-  ) { }
+  ) {}
 
   private async findUser(email: UsersDto['email'], newUser = false) {
     const user = await this.usersRepo.findOne({ email });

@@ -10,7 +10,7 @@ export class AuthService {
   constructor(
     private usersService: UsersService,
     private readonly jwtService: JwtService,
-  ) { }
+  ) {}
 
   async register(userDto: UsersCreateDto): Promise<AuthCredential> {
     const newUser = await this.usersService.create(userDto);
@@ -28,14 +28,17 @@ export class AuthService {
     return {
       expiresIn: process.env.EXPIRES_IN,
       accessToken,
-      email
+      email,
     };
   }
 
   async validateUser(payload: JwtPayload): Promise<UsersDto> {
     const user = await this.usersService.getSingle(payload.email);
     if (!user) {
-      throw new HttpException('Invalid token from validateUser', HttpStatus.UNAUTHORIZED);
+      throw new HttpException(
+        'Invalid token from validateUser',
+        HttpStatus.UNAUTHORIZED,
+      );
     }
     return user;
   }

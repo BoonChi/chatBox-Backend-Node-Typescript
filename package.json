@@ -23,7 +23,19 @@
     "typeorm:create": "npm run typeorm migration:create -- -n PostRefactoring",
     "typeorm:generate": "npm run typeorm migration:generate -- -n",
     "typeorm:run": "npm run typeorm migration:run",
-    "typeorm:revert": "npm run typeorm migration:revert"
+    "typeorm:revert": "npm run typeorm migration:revert",
+    "prepare": "husky install"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.{js,ts}": [
+    "npm run format",
+    "npm run lint"
+  ]
   },
   "dependencies": {
     "@nestjs/apollo": "^10.0.9",
@@ -67,7 +79,9 @@
     "eslint": "^8.0.1",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-prettier": "^4.0.0",
+    "husky": "^8.0.1",
     "jest": "^27.2.5",
+    "lint-staged": "^12.4.1",
     "prettier": "^2.3.2",
     "source-map-support": "^0.5.20",
     "supertest": "^6.1.3",

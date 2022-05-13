@@ -11,7 +11,7 @@ import {
 @Controller('api/conversations')
 @UseGuards(AuthGuard())
 export class ConversationsController {
-  constructor(readonly conversationsService: ConversationsService) { }
+  constructor(readonly conversationsService: ConversationsService) {}
 
   @Get()
   async findByUser(@Req() req: IReq): Promise<ConversationsDto[]> {
