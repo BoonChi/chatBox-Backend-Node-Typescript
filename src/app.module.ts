@@ -1,6 +1,4 @@
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
 import { AppGateway } from './app.gateway';
 import { ConversationModule } from './conversations/conversations.module';
 import { DatabaseModule } from './database/database.module';
@@ -10,8 +8,7 @@ import { UsersModule } from './users/users.module';
 import { GraphqlAppModule } from './graphql/graphql.module';
 
 @Module({
-  controllers: [AppController],
-  providers: [AppService, AppGateway],
+  providers: [AppGateway],
   imports: [
     ConfigModule.forRoot({}),
     ConversationModule,

@@ -5,8 +5,8 @@ export class UsersDto {
 }
 
 export class LoginUserDto {
-  @IsNotEmpty() @IsEmail() readonly email: string;
-  @IsNotEmpty() readonly password: string;
+  @IsNotEmpty() @IsEmail() email: string;
+  @IsNotEmpty() password: string;
 }
 
 export class UsersCreateDto extends LoginUserDto {}

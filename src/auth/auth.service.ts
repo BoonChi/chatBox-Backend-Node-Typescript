@@ -3,7 +3,9 @@ import { JwtService } from '@nestjs/jwt';
 import { LoginUserDto, UsersCreateDto, UsersDto } from '@users/dto/users.dto';
 import { JwtPayload } from '@users/type/i-jwt';
 import { UsersService } from '@users/users.service';
+import appConfig from '@config/app.config';
 import { AuthCredential } from './type/i-auth';
+import { guard, validateParam } from '@common/decorator/parameter.decorator';
 
 @Injectable()
 export class AuthService {
@@ -12,21 +14,22 @@ export class AuthService {
     private readonly jwtService: JwtService,
   ) {}
 
-  async register(userDto: UsersCreateDto): Promise<AuthCredential> {
+  @validateParam(UsersCreateDto)
+  async register(@guard userDto: UsersCreateDto): Promise<AuthCredential> {
     const newUser = await this.usersService.create(userDto);
     return this._createToken(newUser.email);
   }
 
   async login(loginUserDto: LoginUserDto): Promise<AuthCredential> {
-    await this.usersService.findByLogin(loginUserDto);
-    return this._createToken(loginUserDto.email);
+    const userEmail = await this.usersService.findByLogin(loginUserDto);
+    return this._createToken(userEmail);
   }
 
   private _createToken(email: UsersDto['email']): AuthCredential {
     const user: JwtPayload = { email };
     const accessToken = this.jwtService.sign(user);
     return {
-      expiresIn: process.env.EXPIRES_IN,
+      expiresIn: appConfig.expiresIn,
       accessToken,
       email,
     };
