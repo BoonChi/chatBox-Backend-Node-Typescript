@@ -1,6 +1,6 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { comparePasswords } from 'src/common/utils';
+import { comparePasswords } from '@common/utils';
 import { Repository } from 'typeorm';
 import { UsersDomain } from './domain/users.domain';
 import { LoginUserDto, UsersCreateDto, UsersDto } from './dto/users.dto';

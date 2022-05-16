@@ -14,7 +14,6 @@ import { ConversationsService } from './conversations/conversations.service';
     origin: '*',
   },
 })
-// @UseGuards(AuthGuard())
 export class AppGateway {
   constructor(
     private readonly jwtService: JwtService,

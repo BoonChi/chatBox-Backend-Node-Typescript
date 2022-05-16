@@ -13,7 +13,9 @@
     "paths": {
       "@entity/*": ["src/entity/*"],
       "@users/*": ["src/users/*"],
-      "@conversations/*": ["src/conversations/*"]
+      "@conversations/*": ["src/conversations/*"],
+      "@common/*": ["src/common/*"],
+      "@mock/*": ["src/mock/*"]
     },
     "incremental": true,
     "skipLibCheck": true,
