@@ -1,32 +1,22 @@
 import { ConversationsService } from '@conversations/conversations.service';
+import { mockedConversationService, mockedJwtService } from '@mock/helper';
 import { JwtService } from '@nestjs/jwt';
 import { Test, TestingModule } from '@nestjs/testing';
-import { Socket } from 'socket.io';
 import { AppGateway } from './app.gateway';
 
 describe('AppGateway', () => {
   let gateway: AppGateway;
-  const JwtServiceMock = jest.fn().mockImplementation(() => {
-    return {
-      decode: jest.fn(),
-    };
-  });
-  const ConversationsServiceMock = jest.fn().mockImplementation(() => {
-    return {
-      create: jest.fn(),
-    };
-  });
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         AppGateway,
         {
           provide: JwtService,
-          useValue: JwtServiceMock,
+          useValue: mockedJwtService,
         },
         {
           provide: ConversationsService,
-          useValue: ConversationsServiceMock,
+          useValue: mockedConversationService,
         },
       ],
     }).compile();
@@ -38,9 +28,17 @@ describe('AppGateway', () => {
     expect(gateway).toBeDefined();
   });
 
-  it('should be defined', async () => {
-    await gateway.handleMessage('rest' as any, 'testing');
-    expect(JwtServiceMock).toBeCalledTimes(1);
-    expect(ConversationsServiceMock).toBeCalledTimes(1);
+  it('should call JwtService and ConversationsService', async () => {
+    const socketInfo = {
+      handshake: {
+        headers: {
+          authorization: 'testing token',
+        },
+      },
+      emit: () => '',
+    };
+    await gateway.handleMessage(socketInfo as any, 'testing');
+    expect(mockedJwtService.decode).toBeCalledTimes(1);
+    expect(mockedConversationService.create).toBeCalledTimes(1);
   });
 });
