@@ -41,4 +41,10 @@ describe('AppGateway', () => {
     expect(mockedJwtService.decode).toBeCalledTimes(1);
     expect(mockedConversationService.create).toBeCalledTimes(1);
   });
+
+  it('should throw error if there is no authorization header ', async () => {
+    await expect(gateway.handleMessage(null, null)).rejects.toThrow(
+      'Invalid credentials',
+    );
+  });
 });

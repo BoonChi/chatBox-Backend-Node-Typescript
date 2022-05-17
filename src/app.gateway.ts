@@ -19,7 +19,7 @@ export class AppGateway {
 
   @SubscribeMessage('msgToServer')
   async handleMessage(client: Socket, payload: string): Promise<void> {
-    if (!client.handshake?.headers?.authorization)
+    if (!client?.handshake?.headers?.authorization)
       throw new HttpException('Invalid credentials', HttpStatus.UNAUTHORIZED);
     const jwtPayload = this.jwtService.decode(
       client.handshake.headers.authorization.replace('Bearer ', ''),
