@@ -49,7 +49,7 @@ $ yarn start:prod
 
 ```bash
 # unit tests
-$ yarntest
+$ yarn test
 
 # e2e tests
 $ yarn test:e2e
