@@ -1,7 +1,7 @@
 import { Body, Controller, Get, Post, Req, UseGuards } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { UsersDto } from '@users/dto/users.dto';
-import { IReq } from 'src/common/type/common.type';
+import { IReq } from '@common/type/common.type';
 import { ConversationsService } from './conversations.service';
 import {
   ConversationsCreateDto,
