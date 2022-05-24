@@ -6,6 +6,7 @@ import { AuthCredential } from './type/i-auth';
 @Controller('api/auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
+
   @Post('register')
   public async register(
     @Body() createUserDto: UsersCreateDto,

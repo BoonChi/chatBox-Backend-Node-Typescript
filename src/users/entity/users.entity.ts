@@ -7,6 +7,7 @@ import {
 } from 'typeorm';
 import { hash } from 'bcrypt';
 import { Field, ID, ObjectType } from '@nestjs/graphql';
+import { DbAwareColumn } from '@common/decorator/sqliteColumn.decorator';
 
 @ObjectType()
 @Entity('users')
@@ -28,9 +29,11 @@ export class UsersEntity {
   password: string;
 
   @CreateDateColumn({ type: 'timestamp' })
+  @DbAwareColumn({ type: 'timestamp' })
   createdDate: Date;
 
   @CreateDateColumn({ type: 'timestamp' })
+  @DbAwareColumn({ type: 'timestamp' })
   updatedDate: Date;
 
   @BeforeInsert()

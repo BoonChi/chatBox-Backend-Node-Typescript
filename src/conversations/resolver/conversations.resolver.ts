@@ -16,8 +16,8 @@ import {
 import { UsersDto } from '@users/dto/users.dto';
 import { UsersEntity } from '@users/entity/users.entity';
 import { UsersService } from '@users/users.service';
-import { AuthGQLGuard } from 'src/auth/auth.gql.guard';
-import { CurrentUser } from 'src/common/decorator/user.decorator';
+import { AuthGQLGuard } from '@auth/auth.gql.guard';
+import { CurrentUser } from '@common/decorator/user.decorator';
 
 @Resolver(() => ConversationEntity)
 @UseGuards(AuthGQLGuard)

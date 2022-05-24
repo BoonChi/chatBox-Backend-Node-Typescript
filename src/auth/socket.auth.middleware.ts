@@ -2,7 +2,7 @@ import { JwtService } from '@nestjs/jwt';
 import { JwtPayload } from '@users/type/i-jwt';
 import { UsersService } from '@users/users.service';
 import { Socket } from 'socket.io';
-import { IReq } from 'src/common/type/common.type';
+import { IReq } from '@common/type/common.type';
 
 export interface AuthSocket extends Socket {
   authorizedUser: IReq['user'];

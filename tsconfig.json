@@ -11,11 +11,13 @@
     "outDir": "./dist",
     "baseUrl": ".",
     "paths": {
+      "@config/*": ["src/config/*"],
       "@entity/*": ["src/entity/*"],
       "@users/*": ["src/users/*"],
       "@conversations/*": ["src/conversations/*"],
       "@common/*": ["src/common/*"],
-      "@mock/*": ["src/mock/*"]
+      "@mock/*": ["src/mock/*"],
+      "@auth/*": ["src/auth/*"]
     },
     "incremental": true,
     "skipLibCheck": true,

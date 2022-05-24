@@ -1,3 +1,4 @@
+import { DbAwareColumn } from '@common/decorator/sqliteColumn.decorator';
 import { Field, ID, ObjectType } from '@nestjs/graphql';
 import { UsersEntity } from '@users/entity/users.entity';
 import {
@@ -21,10 +22,12 @@ export class ConversationEntity {
 
   @Field(() => Date)
   @CreateDateColumn({ type: 'timestamp' })
+  @DbAwareColumn({ type: 'timestamp' })
   createdDate: Date;
 
   @Field(() => Date)
   @CreateDateColumn({ type: 'timestamp' })
+  @DbAwareColumn({ type: 'timestamp' })
   updatedDate: Date;
 
   @ManyToOne(() => UsersEntity)
