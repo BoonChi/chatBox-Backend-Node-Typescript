@@ -4,6 +4,7 @@ import {
   CreateDateColumn,
   PrimaryGeneratedColumn,
   BeforeInsert,
+  UpdateDateColumn,
 } from 'typeorm';
 import { hash } from 'bcrypt';
 import { Field, ID, ObjectType } from '@nestjs/graphql';
@@ -28,12 +29,12 @@ export class UsersEntity {
   @Column({ type: 'varchar', nullable: false })
   password: string;
 
-  @CreateDateColumn({ type: 'timestamp' })
   @DbAwareColumn({ type: 'timestamp' })
+  @CreateDateColumn({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   createdDate: Date;
 
-  @CreateDateColumn({ type: 'timestamp' })
   @DbAwareColumn({ type: 'timestamp' })
+  @UpdateDateColumn({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   updatedDate: Date;
 
   @BeforeInsert()

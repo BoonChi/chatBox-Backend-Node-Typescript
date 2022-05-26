@@ -19,7 +19,7 @@ export class AppGateway {
   private logger = new Logger('AppGateway');
 
   @SubscribeMessage('msgToServer')
-  async handleMessage(client: Socket, payload: string): Promise<void> {
+  async handleMessage(client: Socket, payload: string): Promise<unknown> {
     if (!client?.handshake?.headers?.authorization || !payload)
       throw new HttpException('Invalid request', HttpStatus.BAD_REQUEST);
     const jwtPayload = this.jwtService.decode(
@@ -27,12 +27,15 @@ export class AppGateway {
     ) as JwtDecodePayload;
 
     this.logger.log(jwtPayload, payload);
-    client.emit('msgToClient', payload);
     await this.conversationService.create(
       {
         email: jwtPayload.email,
       },
       { text: payload },
     );
+    return {
+      event: 'msgToServer',
+      data: payload,
+    };
   }
 }
