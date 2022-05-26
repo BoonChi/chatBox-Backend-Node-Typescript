@@ -7,10 +7,11 @@ import {
   CreateDateColumn,
   PrimaryGeneratedColumn,
   ManyToOne,
+  UpdateDateColumn,
 } from 'typeorm';
 
-@Entity()
 @ObjectType()
+@Entity('conversation')
 export class ConversationEntity {
   @PrimaryGeneratedColumn('uuid')
   @Field(() => ID)
@@ -21,13 +22,13 @@ export class ConversationEntity {
   text: string;
 
   @Field(() => Date)
-  @CreateDateColumn({ type: 'timestamp' })
   @DbAwareColumn({ type: 'timestamp' })
+  @CreateDateColumn({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   createdDate: Date;
 
   @Field(() => Date)
-  @CreateDateColumn({ type: 'timestamp' })
   @DbAwareColumn({ type: 'timestamp' })
+  @UpdateDateColumn({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   updatedDate: Date;
 
   @ManyToOne(() => UsersEntity)
