@@ -17,7 +17,8 @@
       "@conversations/*": ["src/conversations/*"],
       "@common/*": ["src/common/*"],
       "@mock/*": ["src/mock/*"],
-      "@auth/*": ["src/auth/*"]
+      "@auth/*": ["src/auth/*"],
+      "@redis/*": ["src/redis-cache/*"]
     },
     "incremental": true,
     "skipLibCheck": true,

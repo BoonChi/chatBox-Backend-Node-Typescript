@@ -13,9 +13,18 @@ services:
     - $POSTGRES_LOCAL_PORT:$POSTGRES_DOCKER_PORT
     volumes:
       - db:/data/db
+  cache:
+    image: redis:alpine
+    restart: always
+    ports:
+    - $REDIS_PORT:$REDIS_DOCKER_PORT
+    volumes:
+      - cache:/data/cache
+    command: redis-server --save 60 1 --loglevel warning --requirepass $REDIS_PASSWORD
   chatbox:
     depends_on:
       - postgres
+      - cache
     build:
       context: ./
       dockerfile: Dockerfile-dev
@@ -32,12 +41,16 @@ services:
       - POSTGRES_PORT=$POSTGRES_DOCKER_PORT
       - SECRET_KEY=xobsecret123
       - EXPIRES_IN=2d
+      - REDIS_HOST=$REDIS_HOST
+      - REDIS_PORT=$REDIS_PORT
+      - REDIS_PASSWORD=$REDIS_PASSWORD
     stdin_open: true
     tty: true
     volumes:
       - ./:/usr/src/chatBoxNestJs
     links:
       - postgres
+      - cache
 
   # elasticSearch:
   #   image: docker.elastic.co/elasticsearch/elasticsearch:8.1.0
@@ -58,3 +71,4 @@ services:
   #     - 9200:9200
 volumes:
   db:
+  cache:

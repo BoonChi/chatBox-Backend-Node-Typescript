@@ -32,3 +32,7 @@ export const mockedUsersService = {
   findByLogin: jest.fn().mockReturnValue('test@gmail.com'),
   getSingle: jest.fn().mockReturnValue('test@gmail.com'),
 };
+
+export const mockedRedisCacheService = {
+  set: jest.fn(),
+};
