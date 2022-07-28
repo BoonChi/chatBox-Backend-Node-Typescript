@@ -6,6 +6,7 @@ import { ConfigModule } from '@nestjs/config';
 import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
 import { GraphqlAppModule } from './graphql/graphql.module';
+import { RedisCacheModule } from './redis-cache/redis-cache.module';
 
 @Module({
   providers: [AppGateway],
@@ -16,6 +17,7 @@ import { GraphqlAppModule } from './graphql/graphql.module';
     AuthModule,
     UsersModule,
     GraphqlAppModule,
+    RedisCacheModule,
   ],
 })
 export class AppModule {}

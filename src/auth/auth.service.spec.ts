@@ -1,9 +1,14 @@
-import { mockedJwtService, mockedUsersService } from '@mock/helper';
+import {
+  mockedJwtService,
+  mockedRedisCacheService,
+  mockedUsersService,
+} from '@mock/helper';
 import { JwtService } from '@nestjs/jwt';
 import { Test, TestingModule } from '@nestjs/testing';
 import { UsersService } from '@users/users.service';
 import appConfig from '@config/app.config';
 import { AuthService } from './auth.service';
+import { RedisCacheService } from '@redis/redis-cache.service';
 
 describe('AuthService', () => {
   let service: AuthService;
@@ -27,6 +32,10 @@ describe('AuthService', () => {
         {
           provide: UsersService,
           useValue: mockedUsersService,
+        },
+        {
+          provide: RedisCacheService,
+          useValue: mockedRedisCacheService,
         },
       ],
     }).compile();

@@ -6,6 +6,7 @@ import { JwtStrategy } from './jwt.strategy';
 import { UsersModule } from '@users/users.module';
 import { JwtModule } from '@nestjs/jwt';
 import appConfig from '@config/app.config';
+import { RedisCacheModule } from 'src/redis-cache/redis-cache.module';
 
 @Module({
   imports: [
@@ -21,6 +22,7 @@ import appConfig from '@config/app.config';
         expiresIn: appConfig.expiresIn,
       },
     }),
+    RedisCacheModule,
   ],
   controllers: [AuthController],
   providers: [AuthService, JwtStrategy],

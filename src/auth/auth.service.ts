@@ -6,12 +6,15 @@ import { UsersService } from '@users/users.service';
 import appConfig from '@config/app.config';
 import { AuthCredential } from './type/i-auth';
 import { guard, validateParam } from '@common/decorator/parameter.decorator';
+import { RedisCacheService } from '@redis/redis-cache.service';
+import { RedisKey } from '@redis/redis-key';
 
 @Injectable()
 export class AuthService {
   constructor(
     private usersService: UsersService,
     private readonly jwtService: JwtService,
+    private cacheManager: RedisCacheService,
   ) {}
 
   @validateParam(UsersCreateDto)
@@ -25,14 +28,19 @@ export class AuthService {
     return this._createToken(userEmail);
   }
 
-  private _createToken(email: UsersDto['email']): AuthCredential {
+  private async _createToken(
+    email: UsersDto['email'],
+  ): Promise<AuthCredential> {
     const user: JwtPayload = { email };
     const accessToken = this.jwtService.sign(user);
-    return {
+    const userDetails = {
       expiresIn: appConfig.expiresIn,
       accessToken,
       email,
     };
+    await this.cacheManager.set(RedisKey.CurrentUser, userDetails);
+
+    return userDetails;
   }
 
   async validateUser(payload: JwtPayload): Promise<UsersDto> {
