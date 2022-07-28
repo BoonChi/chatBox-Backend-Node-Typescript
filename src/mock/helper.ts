@@ -35,4 +35,7 @@ export const mockedUsersService = {
 
 export const mockedRedisCacheService = {
   set: jest.fn(),
+  get: jest.fn(),
+  reset: jest.fn(),
+  del: jest.fn(),
 };
