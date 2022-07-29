@@ -9,10 +9,11 @@ import { UsersService } from '@users/users.service';
 import appConfig from '@config/app.config';
 import { AuthService } from './auth.service';
 import { RedisCacheService } from '@redis/redis-cache.service';
+import { UsersCreateDto } from '@users/dto/users.dto';
 
 describe('AuthService', () => {
   let service: AuthService;
-  const user = {
+  const user: UsersCreateDto = {
     email: 'test@gmail.com',
     password: 'testPassword',
   };
@@ -68,6 +69,13 @@ describe('AuthService', () => {
     const response = await service.register(user);
     expect(mockedUsersService.create).toBeCalledTimes(1);
     expect(mockedJwtService.sign).toBeCalledTimes(1);
+    expect(response).toStrictEqual(credential);
+  });
+
+  it('should register a user but with longer accessToken', async () => {
+    user.isRememberChosen = true;
+    const response = await service.register(user);
+    credential.expiresIn = '60d';
     expect(response).toStrictEqual(credential);
   });
 
