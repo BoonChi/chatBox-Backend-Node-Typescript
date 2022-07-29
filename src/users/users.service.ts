@@ -59,7 +59,10 @@ export class UsersService {
     const areEqual = await comparePasswords(user.password, password);
 
     if (!areEqual) {
-      throw new HttpException('Invalid credentials', HttpStatus.UNAUTHORIZED);
+      throw new HttpException(
+        'Invalid credentials: Password is incorrect',
+        HttpStatus.UNAUTHORIZED,
+      );
     }
 
     return user.email;
