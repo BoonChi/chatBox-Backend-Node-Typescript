@@ -7,6 +7,7 @@ export class UsersDto {
 export class LoginUserDto {
   @IsNotEmpty() @IsEmail() email: string;
   @IsNotEmpty() password: string;
+  isRememberChosen: boolean;
 }
 
 export class UsersCreateDto extends LoginUserDto {}

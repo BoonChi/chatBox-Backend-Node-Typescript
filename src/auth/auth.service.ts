@@ -20,21 +20,22 @@ export class AuthService {
   @validateParam(UsersCreateDto)
   async register(@guard userDto: UsersCreateDto): Promise<AuthCredential> {
     const newUser = await this.usersService.create(userDto);
-    return this._createToken(newUser.email);
+    return this._createToken(newUser.email, userDto.isRememberChosen);
   }
 
   async login(loginUserDto: LoginUserDto): Promise<AuthCredential> {
     const userEmail = await this.usersService.findByLogin(loginUserDto);
-    return this._createToken(userEmail);
+    return this._createToken(userEmail, loginUserDto.isRememberChosen);
   }
 
   private async _createToken(
     email: UsersDto['email'],
+    isRememberChosen = false,
   ): Promise<AuthCredential> {
     const user: JwtPayload = { email };
     const accessToken = this.jwtService.sign(user);
     const userDetails = {
-      expiresIn: appConfig.expiresIn,
+      expiresIn: isRememberChosen ? '60d' : appConfig.expiresIn,
       accessToken,
       email,
     };
